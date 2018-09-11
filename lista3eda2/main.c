@@ -92,12 +92,40 @@ void quickSort(int vector[], int inicioVetor, int fimVetor) {
     
 }
 
-int main() {
+void bucketSort(int vector[], int lenght)
+{
+    int i, j;
+    int count[lenght];
+    
+    double duration;
+    
+    clock_t start = clock();
+    for (i = 0; i < lenght; i++) {
+        count[i] = 0;
+    }
+    
+    for (i = 0; i < lenght; i++) {
+        (count[vector[i]])++;
+    }
+    
+    for (i = 0, j = 0; i < lenght; i++) {
+        for(; count[i] > 0; (count[i])--) {
+            vector[j++] = i;
+        }
+    }
+    clock_t end = clock();
+    
+    duration = end-start;
+    printf("Bucket sort: %lf segundos\n", duration/ CLOCKS_PER_SEC);
+}
 
-    int *vector1;
-    int *vector2;
+int main() {
     int lenght;
     int range;
+    
+    int *vector1;
+    int *vector2;
+    int *vector3;
     
     
     printf("Selecione o tamanho do vetor a ser gerado: ");
@@ -108,6 +136,7 @@ int main() {
     
     vector1 = generateRandomVector(lenght, range);
     vector2 = copyVector(vector1, lenght);
+    vector3 = copyVector(vector1, lenght);
     
     printf("Vetor gerado: ");
     for (int i=0; i < lenght; i++) {
@@ -126,6 +155,9 @@ int main() {
     clock_t end = clock();
     duration = end-start;
     printf("Quick sort: %lf segundos\n", duration/ CLOCKS_PER_SEC);
+    
+    //Bucket Sort
+    bucketSort(vector3, lenght);
     
     printf("Vetor ordenado: ");
     for (int i=0; i < lenght; i++) {
