@@ -20,6 +20,18 @@ int* generateRandomVector(int lenght, int maxValue) {
     return vector;
 }
 
+int* copyVector(int *copiedVector, int lenght) {
+    int *finalVector;
+    
+    finalVector = malloc(lenght * sizeof(int));
+    
+    for (int i=0; i < lenght; i++) {
+        finalVector[i] = copiedVector[i];
+    }
+    
+    return finalVector;
+}
+
 void shellSort(int vector[], int lenght) {
     int gap = lenght/2;
     int auxValue, auxIndex;
@@ -46,11 +58,47 @@ void shellSort(int vector[], int lenght) {
     printf("Shell sort: %lf segundos\n", duration/ CLOCKS_PER_SEC);
 }
 
+void quickSort(int vector[], int inicioVetor, int fimVetor) {
+    int i, j, pivo, aux;
+    
+    i = inicioVetor;
+    j = fimVetor;
+    
+    //printf("--%d--", vector[(inicioVetor+fimVetor)/2]);
+    
+    pivo = vector[(inicioVetor+fimVetor)/2];
+    
+    while (i <= j) {
+        while (vector[i] < pivo) {
+            i = i+1;
+        } while (pivo < vector[j]) {
+            j = j-1;
+        }
+    
+        if (i <= j) {
+            aux = vector[i];
+            vector[i] = vector[j];
+            vector[j] = aux;
+            i = i+1;
+            j = j-1;
+        }
+    }
+    if (inicioVetor < j) {
+        quickSort(vector, inicioVetor, j);
+    }
+    if (fimVetor > i) {
+        quickSort(vector, i, fimVetor);
+    }
+    
+}
+
 int main() {
 
     int *vector1;
+    int *vector2;
     int lenght;
     int range;
+    
     
     printf("Selecione o tamanho do vetor a ser gerado: ");
     scanf("%d", &lenght);
@@ -59,6 +107,7 @@ int main() {
     scanf("%d", &range);
     
     vector1 = generateRandomVector(lenght, range);
+    vector2 = copyVector(vector1, lenght);
     
     printf("Vetor gerado: ");
     for (int i=0; i < lenght; i++) {
@@ -66,11 +115,21 @@ int main() {
     }
     
     printf("\n\n - Tempo de execução de cada algorítmo -\n");
+    
+    //ShellSort
     shellSort(vector1, lenght);
+    
+    //QuickSort
+    double duration;
+    clock_t start = clock();
+    quickSort(vector2, 0, lenght-1);
+    clock_t end = clock();
+    duration = end-start;
+    printf("Quick sort: %lf segundos\n", duration/ CLOCKS_PER_SEC);
     
     printf("Vetor ordenado: ");
     for (int i=0; i < lenght; i++) {
-        printf("%d ", vector1[i]);
+        printf("%d ", vector2[i]);
     }
     
     return 0;
